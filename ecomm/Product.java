@@ -7,13 +7,13 @@ public abstract class Product {
 	protected int quantity;
 	protected int price;
 	protected static int product_id=0;
-	protected int id;
+	protected String id;
 	public abstract Globals.Category getCategory();
 	public abstract String getName();
-	public abstract int getProductID();
+	public abstract String getProductID();
 	public abstract float getPrice();
 	public abstract int getQuantity();
-	
+
 }
 
 

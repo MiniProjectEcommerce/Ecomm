@@ -1,9 +1,10 @@
 import demo.DemoPlatform;
-import demo.SellerAditya;
-import demo.SellerRaj;
-import demo.SellerTanmay;
+import demo.IMT2021010.SellerRaj;
+import demo.IMT2021015.SellerTanmay;
+import demo.IMT2021545.SellerAditya;
 import ecomm.Platform;
 import ecomm.Seller;
+import java.util.Scanner;
 
 public class PlatformMain {
 
@@ -27,17 +28,20 @@ public class PlatformMain {
 		s3.addPlatform(pf);
 		// keep reading from System.in
 		// If "Check" typed in
-		// invoke 
+		// invoke
+		String s;
+		Scanner sc=new Scanner(System.in);
 		while (true)
 		{
-			try
+			if(sc.nextLine().equals("Check"))
 			{
-				Thread.sleep(1000);
-				pf.processRequests();
-			}
-			catch (Exception e)
-			{
-				System.out.println(e.getMessage());
+				try{
+
+					pf.processRequests();
+				}
+				catch(Exception e)
+				{
+				}
 			}
 		}
 			

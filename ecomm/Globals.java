@@ -20,7 +20,7 @@ public class Globals {
 		}
 	}
 
-	public static String toPlatform = "PortalToPlatform.txt";
-	public static String fromPlatform = "PlatformToPortal.txt";
+	public static String toPlatform = "./PortalToPlatform.txt";
+	public static String fromPlatform = "./PlatformToPortal.txt";
 		
 }

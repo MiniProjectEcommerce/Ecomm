@@ -27,6 +27,6 @@ public abstract class Seller {
 	// Return true if transaction succeeds, false otherwise.
 	// Transaction fails if incorrect productID or quantity exceeds available
 	// inventory
-	public abstract boolean buyProduct(int id, int quantity);
+	public abstract boolean buyProduct(String id, int quantity);
 
 }
