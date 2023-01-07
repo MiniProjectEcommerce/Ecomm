@@ -1,4 +1,5 @@
-
+#include<bits/stdc++.h>
+using namespace std;
 class Portal {
 	public:
 	// Invoked by main or driver class
@@ -10,6 +11,6 @@ class Portal {
 	void processUserCommand(string command);
 	// checks for pending responses (in PortalToPlatform)
 	// Displays response
+	// void checkResponse();
 	void checkResponse();
-
 };

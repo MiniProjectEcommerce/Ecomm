@@ -20,15 +20,14 @@ public class DemoPlatform extends Platform {
 
 	@Override
 	public void processRequests() throws Exception {
-		File toFile = new File("demo/"+Globals.toPlatform);
+		File toFile = new File(Globals.toPlatform);
 		Scanner sc = new Scanner(toFile);
-		FileWriter fromFile = new FileWriter("demo/"+Globals.fromPlatform, true);
-		
-		while (sc.hasNextLine()) {
+		FileWriter fromFile = new FileWriter(Globals.fromPlatform, true);
+		while (sc.hasNext()) 
+		{
 			int PortalID = sc.nextInt();
 			int RequestID = sc.nextInt();
 			String Request = sc.next();
-			System.out.print(PortalID);
 			int quantity;
 			String id,category;
 			if (Request.equals("List")) {
@@ -44,7 +43,7 @@ public class DemoPlatform extends Platform {
 				}
 				for (Product p : products) {
 					fromFile.write(PortalID + " " + RequestID + " " + p.getName() + " " + p.getProductID() + " "
-							+ p.getPrice() + " " + p.getQuantity()+"\n");
+					+ p.getPrice() + " " + p.getQuantity()+"\n");
 				}
 			} else if (Request.equals("Buy")) {
 				id = sc.next();
@@ -64,16 +63,16 @@ public class DemoPlatform extends Platform {
 					fromFile.write(PortalID + " " + RequestID + " " + "Failure"+"\n");
 				}
 			}
-			if(Request.equals("Start"))
+			else if(Request.equals("Start"))
 			{
 				fromFile.write(PortalID + " " + RequestID + " " + "Mobile"+" "+ "Book"+"\n");
 			}
-			fromFile.close();
-			sc.close();
-			// clear the file after reading to avoid reading the same request again
-			FileWriter clearWriter = new FileWriter("demo/"+Globals.toPlatform);
-			clearWriter.write("");
-			clearWriter.close();
 		}
+		fromFile.close();
+		sc.close();
+		// clear the file after reading to avoid reading the same request again
+		FileWriter clearWriter = new FileWriter(Globals.toPlatform);
+		clearWriter.write("");
+		clearWriter.close();
 	}
 }

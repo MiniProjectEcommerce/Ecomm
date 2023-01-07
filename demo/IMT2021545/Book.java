@@ -14,22 +14,22 @@ public class Book extends DemoProduct
         String str = String.valueOf(product_id);
         this.id = str;
     }
-    public String getName(){
+    public String getName(){  // Returns name of product
         return this.unique_name;
     }
-    public float getPrice(){
+    public float getPrice(){    // Returns price of product
         return this.price;
     }
-    public int getQuantity(){
+    public int getQuantity(){   // Returns quantity of product
         return this.quantity;
     }
-    public String getProductID(){
+    public String getProductID(){   // Returns product id of product
         return this.id;
     }
-    public Globals.Category getCategory(){
+    public Globals.Category getCategory(){  // Returns category
         return Globals.Category.Book;
     }
-    public void setQuantity(int quantity){
+    public void setQuantity(int quantity){  // Sets the quantity of a product
         this.quantity = quantity;
     }
 

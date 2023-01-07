@@ -29,7 +29,6 @@ public class PlatformMain {
 		// keep reading from System.in
 		// If "Check" typed in
 		// invoke
-		String s;
 		Scanner sc=new Scanner(System.in);
 		while (true)
 		{
@@ -40,11 +39,10 @@ public class PlatformMain {
 					pf.processRequests();
 				}
 				catch(Exception e)
-				{
+				{ 
 				}
 			}
 		}
-			
 	}
 
 }

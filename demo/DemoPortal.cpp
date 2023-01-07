@@ -1,146 +1,157 @@
-#include<iostream>
-#include<bits/stdc++.h>
-#include "Portal.h"
+#include "DemoPortal.h"
+#include <bits/stdc++.h>
 using namespace std;
-class DemoPortal:public Portal
+DemoPortal::DemoPortal(int portalId) // constructor
 {
-    private:
-	map<int,string> um;//stores the portal id, category
-    int portal;
-    int reqid=999;
-	public:
-        DemoPortal(int portalId)
-        {
-            portal=portalId;
-        }
-		void processUserCommand(string s)
+	portal = portalId;
+}
+// this is split method, which helps in converting a sentence to a vector of words
+vector<string> DemoPortal::split(string str)
+{
+	vector<string> elems;
+	string word = "";
+	for (auto x : str)
+	{
+		if (x == ' ') // whenever a blank is detected it pushes the word in the vector, and clears the word
 		{
-	        if(s[0]=='S')
+			elems.push_back(word);
+			word = "";
+		}
+		else // add the characters detected from the string to word
+		{
+			word = word + x;
+		}
+	}
+	elems.push_back(word); // to push in the last word in the vector
+	word.clear();
+	return elems;
+}
+void DemoPortal::processUserCommand(string command) // To process user commands
+{
+	vector<string> s = split(command);
+	if (s[0] == "Start")
+	{
+		// when input is Start
+		freopen("PortalToPlatform.txt", "a", stdout); // to append in file PortalToPlatform
+		reqid++;									  // to increment reqid variable which generates the request id
+		cout << portal << ' ' << reqid << ' ' << command << "\n";
+		ids.insert({reqid, s[0]}); // maintains the order of the commands passed by the user
+		// change stdout to terminal
+		freopen("/dev/tty", "a", stdout);
+	}
+	else if (s[0] == "List")
+	{
+		// when input is List
+		reqid++; // to increment reqid variable which generates the request id
+		freopen("PortalToPlatform.txt", "a", stdout);
+		ids.insert({reqid, s[0]}); // to maintain the order of the commands passed by the user
+		catName.insert({reqid, s[2]});
+		cout << portal << ' ' << reqid << ' ' << s[0] << ' ' << s[1] << '\n';
+		// change stdout to terminal
+		freopen("/dev/tty", "a", stdout);
+	}
+	else if (s[0] == "Buy")
+	{
+		// when input is Buy
+		string num;
+		reqid++;
+		freopen("PortalToPlatform.txt", "a", stdout);
+		ids.insert({reqid, s[0]});
+		cout << portal << ' ' << reqid << ' ' << command << '\n';
+		// change stdout to terminal
+		freopen("/dev/tty", "a", stdout);
+	}
+	else if (s[0] == "Check")
+	{
+		// when input is Check
+		checkResponse();
+	}
+}
+void DemoPortal::checkResponse()
+{
+	// check for response
+	ifstream in("PlatformToPortal.txt");
+	streambuf *cinbuf = cin.rdbuf();
+	cin.rdbuf(in.rdbuf());
+	int flag = 0;	 // this flag variable triggers the sorting and printing, once it is read
+	string commands; // commands is basically the input read from PortalToPlatform.txt
+	while (getline(cin, commands))
+	{
+		int portalId, requestId;
+		vector<string> tokens = split(commands); // to split the long string "commands" and form a vector of strings named "tokens"
+		portalId = stoi(tokens[0]);				 // typecasting, i.e. to convert integer to string
+		requestId = stoi(tokens[1]);			 // typecasting, i.e. to convert integer to string
+		if (portalId != portal)					 // if portalId in the sentence read, is not equal to the portal; then push in others vector
+		{
+			others.push_back(commands);
+			continue;
+		}
+		// if the command is "List" and flag is zero, or if flag doesn't equal to request ID
+		if ((ids[requestId] != "List" && flag) || flag != requestId)
+		{
+			ListItems(Products[flag], catName[flag]);
+			flag = 0;
+		}
+		// if command is "Start"
+		if (ids[requestId] == "Start")
+		{
+			for (int i = 2; i < tokens.size(); i++)
 			{
-				//when input is Start
-                freopen("demo/PortalToPlatform.txt","a",stdout);
-                reqid++;
-                cout<<portal<<' '<<reqid<<' '<<"Start\n";
-				//change stdout to terminal
-				freopen("/dev/tty","a",stdout);
+				cout << tokens[i] << ' ';
 			}
-			else if(s[0]=='L')
+			cout << '\n';
+		}
+		// if command is "Buy"
+		else if (ids[requestId] == "Buy")
+		{
+			string response = tokens[2];
+			if (response == "Failure")
 			{
-				//when input is List
-				int n=s.size();
-				int c;
-				reqid++;
-                freopen("demo/PortalToPlatform.txt","a",stdout);
-				if(um.find(portal)!=um.end())
-				{
-					c=0;
-				}
-				else
-				{
-					if(s[5]=='B')
-					{
-						um.insert({portal,"Book"});
-					}
-					else
-					{
-						um.insert({portal,"Mobile"});
-					}
-				}
-				if(s[5]=='B')
-				{
-					cout<<portal<<' '<<reqid<<' '<<"List Book\n";
-				}
-				else
-				{
-					cout<<portal<<' '<<reqid<<' '<<"List Mobile\n";
-				}
+				cout << "Sorry, your request could not be processed.\n";
 			}
-			else if(s[0]=='B')
+			else
 			{
-				//when input is Buy
-				string num;
-				reqid++;
-				freopen("demo/PortalToPlatform.txt","a",stdout);
-				int n=s.size();
-				int c=0;
-				string k;
-				string t;
-				for(int i=0;i<n;i++)
-				{
-					if(s[i]==' ' and c<2)
-					{
-						c++;
-						continue;
-					}
-					else if(c==1)
-					{
-						t=t+s[i];
-					}
-					else if(c==2)
-					{
-						k=k+s[i];
-					}
-				}
-				cout<<portal<<' '<<reqid<<" Buy "<<t<<' '<<k<<'\n';
-			}
-			else if(s[0]=='C')
-			{
-				//when input is Check
-				checkResponse();
+				cout << "Items purchased successfully.\n";
 			}
 		}
-		void checkResponse()
+		// if command is "List"
+		else if (ids[requestId] == "List")
 		{
-			// check for response
-			ifstream in("demo/PlatformToPortal.txt");
-			streambuf *cinbuf = std::cin.rdbuf();
-			cin.rdbuf(in.rdbuf());
-			while(true)
-			{
-				string s;
-				getline(cin,s);
-				cout<<s<<'\n';
-				int p=s.size();
-				if(p==0)
-				{
-					break;
-				}
-				else
-				{
-					for(auto x:um)
-					{
-						if(x.second=="Start")
-						{
-							vector<string> vec1;
-							string k;
-							for(int i=0;i<p;i++)
-							{
-								if(s[i]==' ')
-								{
-									vec1.push_back(k);
-									k.clear();
-								}
-								else
-								{
-									k=k+s[i];
-								}
-							}
-							vec1.push_back(k);
-							int y=vec1.size();
-							for(int i=2;i<y;i++)
-							{
-								cout<<vec1[i]<<' ';
-							}
-							cout<<'\n';
-						}
-						else if(x.second=="List")
-						{
-							
-						}
-					}
-				}
-			}
-			//change stdin to terminal
-			cin.rdbuf(cinbuf);
+			string name = tokens[2], id = tokens[3];
+			int price = stoi(tokens[4]), quantity = stoi(tokens[5]);
+			Products[requestId].push_back(make_tuple(name, id, price, quantity));
+			flag = requestId;
 		}
-};
+	}
+	if (flag)
+	{
+		ListItems(Products[flag], catName[flag]);
+	}
+	cin.rdbuf(cinbuf);
+	// to flush the PlatformToPortal.txt on putting Check
+	freopen("PlatformToPortal.txt", "w", stdout);
+	for (int i = 0; i < others.size(); i++)
+	{
+		cout << others[i] << '\n';
+	}
+	// change stdout to terminal
+	freopen("/dev/tty", "a", stdout);
+}
+void DemoPortal ::ListItems(vector<tuple<string, string, int, int>> items, string basis)
+{
+	// to sort the map
+	if (basis == "Name") // if sorting attribute is Name
+	{
+		sort(items.begin(), items.end(), [](tuple<string, string, int, int> a, tuple<string, string, int, int> b)
+			 { return get<0>(a) < get<0>(b); });
+	}
+	else if (basis == "Price") // if sorting attribute is Price
+	{
+		sort(items.begin(), items.end(), [](tuple<string, string, int, int> a, tuple<string, string, int, int> b)
+			 { return get<2>(a) < get<2>(b); });
+	}
+	for (auto it : items) // to print the sorted output
+	{
+		cout << get<0>(it) << " " << get<1>(it) << " " << get<2>(it) << " " << get<3>(it) << '\n';
+	}
+}
